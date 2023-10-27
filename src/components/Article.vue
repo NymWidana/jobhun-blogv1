@@ -1,33 +1,34 @@
 <script setup>
-import blog from "../data/articles.json"
+import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
+import { useDataArticle } from "../stores/store-article";
+import { useRoute } from "vue-router";
 
-// content dummy
-const content1 = [
-  { tag: "h", rawText: "this is heading" },
-  { tag: "p", rawText: "this is paragraph" },
-  { tag: "l", rawTexts: ["this is listItem", "This is listItem"] },
-  {
-    tag: "img",
-    imgUrl: new URL("/src/assets/testimg.png", import.meta.url).href,
-  },
-];
+const route = useRoute();
+const id = route.params.id;
 
-blog.forEach((article)=>{
-  article.imgUrl = new URL(article.imgUrl, import.meta.url).href
-})
+const articleStore = useDataArticle();
+
+const { detailArticles, articles } = storeToRefs(articleStore);
+console.log(detailArticles);
+
+onMounted(async () => {
+  await articleStore.getDetailArticle(id);
+  await articleStore.getDataArticle();
+});
 </script>
 <template>
   <section>
     <div class="banner h-banner bg-black relative">
       <img
-        src="../assets/testimg.png"
-        class="absolute w-full h-full object-cover cursor-none saturate-50 brightness-75"
+        :src="detailArticles.img"
+        class="absolute w-full h-full object-cover saturate-50 brightness-75"
         alt=""
       />
       <div
         class="art-title absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-3xl text-center font-semibold"
       >
-        Hati hati portofolio yang kayak gini yang bakal kena skip hrd
+        {{ detailArticles.title }}
       </div>
     </div>
     <div class="relative bg-white">
@@ -66,27 +67,18 @@ blog.forEach((article)=>{
                 <div class="text-sm">Latest post</div>
               </div>
             </div>
+            <!-- Content utama -->
             <div class="art-contents p-12 text-lg">
-              
-              <!-- pemformatan text -->
-              <div v-for="(content, index) in content1" :key="index">
-                <h1 class="font-bold" v-if="content.tag == 'h'">
-                  {{ content.rawText }}
-                </h1>
-                <p v-else-if="content.tag == 'p'">{{ content.rawText }}</p>
-                <ul v-else-if="content.tag == 'l'">
-                  <li v-for="(listItm, index) in content.rawTexts" :key="index">
-                    - {{ listItm }}
-                  </li>
-                </ul>
+              <div>
+                {{ detailArticles.texts }}
+              </div>
+              <div class="flex justify-center my-5">
                 <img
-                  class="block mx-auto max-w-full object-cover"
-                  v-if="content.tag == 'img'"
-                  :src="content.imgUrl"
-                  :alt="content.imgUrl"
+                  :src="detailArticles.img"
+                  class="h-34 object-cover"
+                  alt=""
                 />
               </div>
-
             </div>
           </div>
         </div>
@@ -95,21 +87,19 @@ blog.forEach((article)=>{
     <div class="bg-black h-0.5 mx-auto max-w-4xl"></div>
     <div class="rcnt-post wraper py-8 pb-20">
       <h2 class="text-center py-8 text-2xl">Recently Posted</h2>
-      <div class="w-full flex py-4 overflow-x-scroll gap-4">
-        
-
+      <div class="w-full flex overflow-x-scroll gap-4">
         <!-- bagaimana caranya buat horizontal scrollable items dengan setiap items width adalah 1/3 dari width containernya  -->
-        
+
         <router-link
-          class="relative rounded-lg shadow-md shadow-gray-200"
-          v-for="(post, index) in blog"
+          class="relative rounded-lg shadow-md shadow-gray-200 w-full"
+          v-for="(post, index) in articles"
           :key="index"
-          :to="'/article/' + post.title"
+          :to="'/article/' + post.id"
         >
           <div class="">
             <img
               class="w-full rounded-t-lg aspect-video object-cover"
-              :src="post.imgUrl"
+              :src="post.img"
               :alt="post.title"
             />
           </div>
@@ -131,9 +121,6 @@ blog.forEach((article)=>{
             </div>
           </div>
         </router-link>
-
-
-
       </div>
     </div>
   </section>

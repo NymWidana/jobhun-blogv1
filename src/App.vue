@@ -1,9 +1,6 @@
 <script setup>
-import Jblog from "./components/Blog.vue";
-import Article from "./components/Article.vue";
 import Jheader from "./components/Header.vue";
 import Jfooter from "./components/Footer.vue";
-import articles from "./data/articles.json"
 
 const blogPosts = [
   {
@@ -21,7 +18,6 @@ const ctgrFilter = [
   "UiUx",
   "startup",
 ];
-
 </script>
 
 <template>

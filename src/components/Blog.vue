@@ -1,9 +1,12 @@
 <script setup>
-import blog from "../data/articles.json";
+import { storeToRefs } from "pinia";
+import { useDataArticle } from "../stores/store-article";
 
-blog.forEach((article)=>{
-  article.imgUrl = new URL(article.imgUrl, import.meta.url).href
-})
+const articleStore = useDataArticle();
+
+const { articles } = storeToRefs(articleStore);
+articleStore.getDataArticle();
+console.log(articles);
 
 const filters = [
   "business",
@@ -15,27 +18,19 @@ const filters = [
   "Comuunities",
   "Other",
 ];
-
-window.addEventListener("scroll", function (e) {
-  let target = document.querySelector(".custom-scrl");
-  let scrolled = window.pageYOffset;
-  const targetpos = target.getBoundingClientRect().top + scrolled - 100;
-  target.style.transform =
-    "translate3d(0," + (scrolled - targetpos) * 0.25 + "px,0)";
-});
 </script>
 
 <template>
   <section class="bg-white">
     <div class="wraper">
       <div class="slogan my-12">
-        <div class="text-4xl font-bold">Blog Jobhun</div>
+        <div class="text-4xl font-bold">articles Jobhun</div>
         <div class="text-xl">
           Temukan berbagai inspirasi dan informasi seputar pengembangan karier
         </div>
       </div>
     </div>
-    <div class="blog">
+    <div class="articles">
       <div class="content-wraper mb-28">
         <div
           class="flex flex-col-reverse md:flex-row items-start justify-center gap-6 md:gap-12 lg:gap-24 my-12"
@@ -47,23 +42,23 @@ window.addEventListener("scroll", function (e) {
             <div class="bg-white relative rounded-3xl rounded-bl-none">
               <div>
                 <img
-                  src="../assets/testimg.png"
+                  :src="listArticle[0].img"
                   class="w-full rounded-t-3xl aspect-video object-cover"
                   alt=""
                 />
               </div>
               <div class="p-2">
                 <h3 class="text-lg text-justify font-medium">
-                  {{ blog[0].title }}
+                  {{ listArticle[0].title }}
                 </h3>
                 <p class="text-justify font-light">
-                  {{ blog[0].texts }}
+                  {{ listArticle[0].texts }}
                 </p>
                 <div class="flex justify-between items-center my-4 px-8">
                   <div class="flex items-center">
                     <div
                       class="text-sm rounded-full py-1 px-2"
-                      v-for="(tag, index) in blog[0].category"
+                      v-for="(tag, index) in listArticle.category"
                       :key="index"
                     >
                       {{ tag }}
@@ -116,32 +111,32 @@ window.addEventListener("scroll", function (e) {
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <router-link
               class="bg-white relative rounded-lg shadow-md shadow-gray-200"
-              v-for="(post, index) in blog"
-              :key="index"
-              :to="'/article/' + post.title"
+              v-for="article in articles"
+              :key="article.id"
+              :to="'/article/' + article.id"
             >
               <div>
                 <img
                   class="w-full rounded-t-lg aspect-video object-cover"
-                  :src="post.imgUrl"
-                  :alt="post.title"
+                  :src="article.img"
+                  :alt="article.title"
                 />
               </div>
               <div class="p-2">
                 <h3 class="text-justify font-medium">
-                  {{ post.title }}
+                  {{ article.title }}
                 </h3>
                 <div class="flex justify-between items-center my-4 px-2">
                   <div class="flex items-center">
                     <div
                       class="text-sm rounded-full py-1 px-2"
-                      v-for="(tag, index) in post.category"
+                      v-for="(tag, index) in article.category"
                       :key="index"
                     >
                       {{ tag }}
                     </div>
                   </div>
-                  <div class="font-semibold">{{ post.date }}</div>
+                  <div class="font-semibold">{{ article.date }}</div>
                 </div>
               </div>
             </router-link>
@@ -161,9 +156,9 @@ window.addEventListener("scroll", function (e) {
         </div>
         <div class="content-wraper">
           <router-link
-            :to="'/article/' + post.title"
+            :to="'/article/' + post.id"
             class="rcmnd-posts border-b border-black my-12"
-            v-for="(post, index) in blog"
+            v-for="(post, index) in listArticle"
             :key="index"
           >
             <div>
