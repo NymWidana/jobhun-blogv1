@@ -1,0 +1,11 @@
+{
+    "id": 3,
+    "title": "Hati hati portofolio yang kayak gini yang bakal kena skip hrd",
+    "texts": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum fugit libero placeat voluptate. Quae error atque laboriosam iusto dicta sapiente dolorum beatae neque mollitia aliquam! Aspernatur unde nam ipsa nulla!",
+    "img": "/public/assets/testimg.png",
+    "category": [
+        "busines",
+        "tips"
+    ],
+    "date": "16 July 2023"
+}
