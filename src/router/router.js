@@ -11,4 +11,9 @@ const router = createRouter({
   routes,
 });
 
+router.afterEach((to, from) => {
+  // Scroll to the top of the page
+  window.scrollTo(0, 0);
+});
+
 export default router;

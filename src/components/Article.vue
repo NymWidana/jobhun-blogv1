@@ -10,7 +10,6 @@ const id = route.params.id;
 const articleStore = useDataArticle();
 
 const { detailArticles, articles } = storeToRefs(articleStore);
-console.log(detailArticles);
 
 onMounted(async () => {
   await articleStore.getDetailArticle(id);

@@ -6,7 +6,6 @@ const articleStore = useDataArticle();
 
 const { articles } = storeToRefs(articleStore);
 articleStore.getDataArticle();
-console.log(articles);
 
 const filters = [
   "business",
@@ -42,23 +41,23 @@ const filters = [
             <div class="bg-white relative rounded-3xl rounded-bl-none">
               <div>
                 <img
-                  :src="listArticle[0].img"
+                  :src="articles[0].img"
                   class="w-full rounded-t-3xl aspect-video object-cover"
                   alt=""
                 />
               </div>
               <div class="p-2">
                 <h3 class="text-lg text-justify font-medium">
-                  {{ listArticle[0].title }}
+                  {{ articles[0].title }}
                 </h3>
                 <p class="text-justify font-light">
-                  {{ listArticle[0].texts }}
+                  {{ articles[0].texts }}
                 </p>
                 <div class="flex justify-between items-center my-4 px-8">
                   <div class="flex items-center">
                     <div
                       class="text-sm rounded-full py-1 px-2"
-                      v-for="(tag, index) in listArticle.category"
+                      v-for="(tag, index) in articles.category"
                       :key="index"
                     >
                       {{ tag }}
@@ -158,7 +157,7 @@ const filters = [
           <router-link
             :to="'/article/' + post.id"
             class="rcmnd-posts border-b border-black my-12"
-            v-for="(post, index) in listArticle"
+            v-for="(post, index) in articles"
             :key="index"
           >
             <div>

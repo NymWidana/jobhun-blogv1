@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted } from "vue";
 import Jheader from "./components/Header.vue";
 import Jfooter from "./components/Footer.vue";
 
